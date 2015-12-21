@@ -56,7 +56,7 @@ void main(void)
 		//Breath if alive :)
 		if(mDelay_IsDelayDone(kPit0, aDelayMain)==true)
 		{
-			mDelay_ReStart(kPit0, aDelayMain, 10);
+			mDelay_ReStart(kPit0, aDelayMain, 500);
 			mLeds_AllToggle();
 		}
 	}

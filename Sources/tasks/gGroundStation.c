@@ -32,40 +32,18 @@ void gGroundStation_Setup()
 
 void gGroundStation_Run()
 {
-	char aDatas[kMonitoringStringLength];
-	UInt8 i=0;
+	UInt8 a1;
+	UInt8 a2;
 
-
-	//Get data from UART0 and send back to UART3 (USB)
-	//That should be done using interrupts
-	if(mSwitches_Get(kMaskSwitch0)==kMaskSwitch0)
+	//Should be handled in an interrupt
+	if(mRs232_ReadDataFromBuffer(kUart3USB, &a1)==false) //Read from USB
 	{
-		//Read monitoring coming from Aeroval over Bluetooth
-
-		//Wait for 0x0D
-		mRs232_ReadDataFromBuffer(kUart0Aux, aDatas);
-		if(*aDatas == 0x0D)
-		{
-			//Wait for next char
-			while(mRs232_ReadDataFromBuffer(kUart0Aux, aDatas+1)==true);
-			{
-				//if char = 0X0A => we have a 0x0D, 0x0A
-				if(*(aDatas+1)==0x0A)
-				{
-					//loop for the next string
-					for (i=2; i<kMonitoringStringLength; i++)
-					{
-						while(mRs232_ReadDataFromBuffer(kUart0Aux, aDatas+i)==true);
-					}
-
-					//Send monitoring to PC over USB
-					mRs232_WriteStringFixedSize(kUart3USB, aDatas, kMonitoringStringLength);
-					mRs232_WriteStringFixedSize(kUart4Aux, aDatas, kMonitoringStringLength);
-				}
-			}
-		}
-
-
+		mRs232_WriteChar(kUart4Aux, a1); //Send to UART4
 	}
+	if(mRs232_ReadDataFromBuffer(kUart4Aux, &a2)==false) //Read from UART 4
+	{
+		mRs232_WriteChar(kUart3USB, a2); //Send to USB
+	}
+
 	return;
 }

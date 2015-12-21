@@ -26,9 +26,9 @@
 
 
 #define kUart0BaudRate 921600
-#define kUart3BaudRate 921600
+#define kUart3BaudRate 115200//921600
 //#define kUart3BaudRate 115200
-#define kUart4BaudRate 921600
+#define kUart4BaudRate 115200
 
 
 // Uart reception buffer sizes
